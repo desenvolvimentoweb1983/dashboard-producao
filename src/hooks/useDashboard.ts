@@ -1,38 +1,37 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { calcularEficiencia } from "../utils/calculos";
+import { useEffect, useState } from "react";
+
+export interface DashboardItem {
+  mes: string;
+  produzido: number;
+  meta: number;
+  defeitos: number;
+}
 
 export function useDashboard() {
-  const [dados, setDados] = useState<any[]>([]);
-  const [mesSelecionado, setMesSelecionado] = useState("Jan");
+  const [data, setData] = useState<DashboardItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // carregar dados do JSON público
   useEffect(() => {
-    fetch("/data/dados.json")
-      .then((res) => res.json())
-      .then((json) => setDados(json))
-      .catch(console.error);
+    async function fetchData() {
+      try {
+        const response = await fetch("/data/dados.json");
+
+        if (!response.ok) throw new Error("Erro ao buscar dados");
+
+        const json = await response.json();
+        setData(json);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
   }, []);
 
-  const meses = dados.map((d) => d.mes);
-
-  const dadosFiltrados = dados.filter((d) => d.mes === mesSelecionado);
-
-  const totalProduzido = dadosFiltrados.reduce((acc, d) => acc + d.produzido, 0);
-  const defeitos = dadosFiltrados.reduce((acc, d) => acc + d.defeitos, 0);
-  const eficiencia =
-    dadosFiltrados.length > 0
-      ? calcularEficiencia(dadosFiltrados[0].produzido, dadosFiltrados[0].meta)
-      : 0;
-
-  return {
-    totalProduzido,
-    eficiencia,
-    defeitos,
-    meses,
-    mesSelecionado,
-    setMesSelecionado,
-    dadosFiltrados,
-  };
+  return { data, loading, error };
 }

@@ -1,53 +1,49 @@
 "use client";
 
-import Sidebar from "../../components/layout/Sidebar";
-import Header from "../../components/layout/Header";
-import CardKPI from "../../components/ui/CardKPI";
-import ProductionChart from "../../components/charts/ProductionChart";
-import Select from "../../components/ui/Select";
-import { useDashboard } from "../../hooks/useDashboard";
+import React from "react";
+import CardKPI from "@/components/ui/CardKPI";
+import ProductionChart from "@/components/charts/ProductionChart";
+import { useDashboard } from "@/hooks/useDashboard";
+import { formatNumber, formatPercent } from "@/lib/format";
 
 export default function DashboardPage() {
-  const {
-    totalProduzido,
-    eficiencia,
-    defeitos,
-    meses,
-    mesSelecionado,
-    setMesSelecionado,
-    dadosFiltrados,
-  } = useDashboard();
+  const { data, loading, error } = useDashboard();
+
+  if (loading) return <p>Carregando...</p>;
+  if (error) return <p>Erro ao carregar dados</p>;
+
+  // KPIs calculados
+  const totalProducao = data.reduce((acc, item) => acc + item.produzido, 0);
+  const totalMeta = data.reduce((acc, item) => acc + item.meta, 0);
+  const totalDefeitos = data.reduce((acc, item) => acc + item.defeitos, 0);
+
+  const eficiencia = totalProducao / totalMeta;
+
+  // Dados do gráfico
+  const labels = data.map((item) => item.mes);
+  const producao = data.map((item) => item.produzido);
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
+    <div className="container" style={{ paddingTop: "1rem" }}>
+      <h1>Dashboard de Produção</h1>
+      <p style={{ color: "var(--secondary)" }}>Atualizado agora</p>
 
-      <div className="flex-1 flex flex-col">
-        <Header />
-
-        <main className="p-6 space-y-6 overflow-auto">
-
-          {/* Filtro */}
-          <div className="flex justify-end">
-            <Select
-              value={mesSelecionado}
-              onChange={setMesSelecionado}
-              options={meses}
-            />
-          </div>
-
-          {/* KPIs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <CardKPI title="Produção Total" value={totalProduzido} />
-            <CardKPI title="Eficiência" value={`${eficiencia}%`} />
-            <CardKPI title="Defeitos" value={defeitos} />
-          </div>
-
-          {/* Gráfico */}
-          <ProductionChart dados={dadosFiltrados} />
-
-        </main>
+      {/* KPIs */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: "1rem",
+          margin: "2rem 0",
+        }}
+      >
+        <CardKPI title="Produção Total" value={formatNumber(totalProducao, 0)} />
+        <CardKPI title="Eficiência" value={formatPercent(eficiencia)} />
+        <CardKPI title="Defeitos" value={formatNumber(totalDefeitos, 0)} />
       </div>
+
+      {/* Gráfico */}
+      <ProductionChart labels={labels} data={producao} />
     </div>
   );
 }

@@ -8,47 +8,34 @@ import {
   LinearScale,
   PointElement,
   LineElement,
-  Title,
   Tooltip,
   Legend
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-interface ProductionChartProps {
+interface Props {
   labels: string[];
   data: number[];
 }
 
-const ProductionChart: React.FC<ProductionChartProps> = ({ labels, data }) => {
+export default function ProductionChart({ labels, data }: Props) {
   const chartData = {
     labels,
     datasets: [
       {
         label: "Produção",
         data,
-        fill: true,
+        borderColor: "#1d4ed8",
         backgroundColor: "rgba(29, 78, 216, 0.2)",
-        borderColor: "rgba(29, 78, 216, 1)",
-        borderWidth: 2,
         tension: 0.3,
       },
     ],
   };
 
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: "top" as const },
-      title: { display: true, text: "Produção Mensal" },
-    },
-  };
-
   return (
-    <div className="bg-card-bg p-4 rounded shadow">
-      <Line data={chartData} options={chartOptions} />
+    <div className="card">
+      <Line data={chartData} />
     </div>
   );
-};
-
-export default ProductionChart;
+}
