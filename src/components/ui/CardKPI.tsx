@@ -26,26 +26,26 @@ function useCountUp(value: number, duration = 1000) {
   return display;
 }
 
-const CardKPI: React.FC<CardKPIProps> = ({ title, value, change }) => {
+const icons: Record<string, string> = {
+  producao: "📦",
+  eficiencia: "📈",
+  defeitos: "⚠️",
+};
+
+const CardKPI: React.FC<CardKPIProps> = ({ title, value, type }) => {
   const numericValue = Number(value);
   const animatedValue = useCountUp(numericValue);
 
-  const isPositive = change !== undefined && change >= 0;
-
   return (
     <div className="card">
-      <h3>{title}</h3>
+      <div className="flex-between">
+        <h3>{title}</h3>
+        <span style={{ fontSize: "1.5rem" }}>{icons[type || "producao"]}</span>
+      </div>
 
       <p style={{ fontSize: "2rem", fontWeight: "bold" }}>
         {isNaN(numericValue) ? value : animatedValue}
       </p>
-
-      {change !== undefined && (
-        <span className={isPositive ? "text-success" : "text-danger"}>
-          {isPositive ? "+" : ""}
-          {change}%
-        </span>
-      )}
     </div>
   );
 };

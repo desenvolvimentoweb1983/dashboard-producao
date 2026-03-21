@@ -35,15 +35,28 @@ export default function ProductionChart({ labels, producao, meta }: Props) {
         label: "Meta",
         data: meta,
         borderColor: "#f97316",
-        borderDash: [5, 5],
+        borderDash: [6, 6],
         tension: 0.4,
       },
     ],
   };
 
+  const options = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            return `${context.dataset.label}: ${context.raw}`;
+          },
+        },
+      },
+    },
+  };
+
   return (
     <div className="card">
-      <Line data={data} />
+      <Line data={data} options={options} />
     </div>
   );
 }

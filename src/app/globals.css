@@ -18,6 +18,11 @@ html, body {
   color: var(--foreground);
 }
 
+/* SCROLL SUAVE */
+body {
+  overflow-x: hidden;
+}
+
 /* VARIÁVEIS */
 :root {
   --background: #f4f6f8;
@@ -88,6 +93,7 @@ a:hover {
   overflow-y: auto;
   position: sticky;
   top: 0;
+  transition: left 0.3s ease;
 }
 
 /* HEADER */
@@ -143,6 +149,12 @@ button:hover {
   transform: translateY(-2px);
 }
 
+/* 🔥 ACESSIBILIDADE */
+button:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* BADGE */
 .badge {
   display: inline-block;
@@ -195,7 +207,6 @@ p { margin-bottom: 1rem; }
   .sidebar {
     position: fixed;
     left: -260px;
-    transition: left 0.3s ease;
     z-index: 1000;
   }
 
@@ -226,7 +237,18 @@ footer {
   color: var(--secondary);
   border-top: 1px solid var(--border-color);
 }
+
+/* 🔥 SKELETON (AGORA FUNCIONA 100%) */
+.skeleton {
+  height: 100px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #eee, #ddd, #eee);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite linear;
+  margin-bottom: 1rem;
+}
+
 @keyframes loading {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
