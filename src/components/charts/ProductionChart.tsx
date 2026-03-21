@@ -25,19 +25,20 @@ export default function ProductionChart({ labels, producao, meta }: Props) {
     labels,
     datasets: [
       {
-        label: "Produção",
-        data: producao,
-        borderColor: "#1d4ed8",
-        backgroundColor: "rgba(29, 78, 216, 0.2)",
-        tension: 0.4,
-      },
-      {
-        label: "Meta",
-        data: meta,
-        borderColor: "#f97316",
-        borderDash: [6, 6],
-        tension: 0.4,
-      },
+  label: "Produção",
+  data: producao,
+  borderColor: "#3b82f6",
+  backgroundColor: "rgba(59, 130, 246, 0.15)",
+  fill: true,
+  tension: 0.4,
+},
+{
+  label: "Meta",
+  data: meta,
+  borderColor: "#f97316",
+  borderDash: [6, 6],
+  tension: 0.4,
+},
     ],
   };
 

@@ -37,16 +37,16 @@ const CardKPI: React.FC<CardKPIProps> = ({ title, value, type }) => {
   const animatedValue = useCountUp(numericValue);
 
   return (
-    <div className="card">
-      <div className="flex-between">
-        <h3>{title}</h3>
-        <span style={{ fontSize: "1.5rem" }}>{icons[type || "producao"]}</span>
-      </div>
+    <div className="card fade-in">
+  <div className="flex-between">
+    <span className="kpi-title">{title}</span>
+    <span style={{ fontSize: "1.4rem" }}>{icons[type || "producao"]}</span>
+  </div>
 
-      <p style={{ fontSize: "2rem", fontWeight: "bold" }}>
-        {isNaN(numericValue) ? value : animatedValue}
-      </p>
-    </div>
+  <p className="kpi-value">
+    {isNaN(numericValue) ? value : animatedValue}
+  </p>
+</div>
   );
 };
 

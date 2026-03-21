@@ -1,16 +1,20 @@
 "use client";
 
-import React from "react";
+import Link from "next/link";
 
-interface Props {
-  toggleSidebar: () => void;
-}
-
-export default function Header({ toggleSidebar }: Props) {
+export default function Header() {
   return (
     <header className="header">
-      <button onClick={toggleSidebar}>☰</button>
-      <h3>Dashboard Industrial</h3>
+
+      <div className="logo">
+        <strong>📊 Dashboard</strong>
+      </div>
+
+      <nav className="nav">
+        <Link href="/">Início</Link>
+        <Link href="/dashboard">Dashboard</Link>
+      </nav>
+
     </header>
   );
 }
