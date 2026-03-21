@@ -1,60 +1,86 @@
-"use client";
-
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="home">
+    <div className="container home">
 
       {/* HERO */}
       <section className="hero">
-
-        {/* LOGO */}
         <img
           src="/images/WebDevLuis.png"
-          alt="WebDevLuis Logo"
+          alt="Logo WebDevLuis"
           className="hero-logo"
         />
 
         <h1>Dashboard de Produção Industrial</h1>
 
         <p>
-          Visualize KPIs, eficiência e desempenho da produção em tempo real
-          com um dashboard moderno e interativo.
+          Projeto desenvolvido com foco em análise de dados, organização de
+          informações e apoio à tomada de decisão.
         </p>
 
         <Link href="/dashboard" className="btn-primary">
           Acessar Dashboard
         </Link>
 
-        {/* PREVIEW DO DASHBOARD */}
         <img
           src="/images/dashboard-preview.png"
-          alt="Preview do Dashboard"
+          alt="Preview do dashboard"
           className="hero-image"
         />
-
       </section>
 
-      {/* FEATURES */}
-      <section className="features">
+      {/* 🔥 HABILIDADES ADMINISTRATIVAS */}
+      <section className="section">
+        <h2>Habilidades Administrativas</h2>
 
-        <div className="card">
-          <h3>📊 KPIs em tempo real</h3>
-          <p>Produção, eficiência e defeitos em um só lugar.</p>
+        <div className="features">
+
+          <div className="card">
+            <h3>📊 Excel</h3>
+            <p>
+              Criação de planilhas, fórmulas, organização de dados e controle de informações.
+            </p>
+          </div>
+
+          <div className="card">
+            <h3>📁 Organização de Dados</h3>
+            <p>
+              Estruturação de informações para relatórios e processos administrativos.
+            </p>
+          </div>
+
+          <div className="card">
+            <h3>📈 Análise</h3>
+            <p>
+              Interpretação de dados para auxiliar na tomada de decisões.
+            </p>
+          </div>
+
         </div>
-
-        <div className="card">
-          <h3>📈 Gráficos interativos</h3>
-          <p>Compare meta vs produção com facilidade.</p>
-        </div>
-
-        <div className="card">
-          <h3>⚡ Alta performance</h3>
-          <p>Aplicação rápida com Next.js</p>
-        </div>
-
       </section>
-    </main>
+
+      {/* 🔥 EXCEL (DIFERENCIAL) */}
+      <section className="section">
+        <h2>Projeto em Excel</h2>
+
+        <div className="card">
+          <h3>📊 Controle de Produção em Excel</h3>
+
+          <p>
+            Planilha desenvolvida para aprender excel na prática.
+          </p>
+
+          <a
+            href="/files/controle-producao.xlsx"
+            className="btn-primary"
+            download
+          >
+            📥 Baixar Planilha Excel
+          </a>
+        </div>
+      </section>
+
+    </div>
   );
 }
