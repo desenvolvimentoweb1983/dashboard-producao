@@ -1,7 +1,21 @@
-export default function Sidebar() {
+"use client";
+
+import React from "react";
+
+interface Props {
+  open: boolean;
+}
+
+export default function Sidebar({ open }: Props) {
   return (
-    <aside className="w-64 h-screen bg-gray-900 text-white p-4">
-      <h2 className="text-xl font-bold">Dashboard</h2>
+    <aside className={`sidebar ${open ? "open" : ""}`}>
+      <h2>Dashboard</h2>
+
+      <nav className="flex-col" style={{ gap: "1rem", marginTop: "1rem" }}>
+        <a href="/dashboard">Visão Geral</a>
+        <a href="#">Produção</a>
+        <a href="#">Relatórios</a>
+      </nav>
     </aside>
   );
 }
