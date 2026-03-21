@@ -1,17 +1,16 @@
-type CardKPIProps = {
+type Props = {
   title: string;
   value: string;
   type?: "producao" | "eficiencia" | "defeitos";
 };
 
-export default function CardKPI({ title, value, type }: CardKPIProps) {
-
+export default function CardKPI({ title, value, type }: Props) {
   const getColor = () => {
     switch (type) {
       case "producao":
-        return "text-success";
-      case "eficiencia":
         return "text-primary";
+      case "eficiencia":
+        return "text-success";
       case "defeitos":
         return "text-danger";
       default:
@@ -20,7 +19,7 @@ export default function CardKPI({ title, value, type }: CardKPIProps) {
   };
 
   return (
-    <div className="card">
+    <div className="card fade-in">
       <p className="kpi-title">{title}</p>
       <h2 className={`kpi-value ${getColor()}`}>{value}</h2>
     </div>

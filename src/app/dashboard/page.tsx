@@ -9,7 +9,6 @@ import Skeleton from "@/components/ui/Skeleton";
 
 export default function DashboardPage() {
   const { data, loading, error } = useDashboard();
-
   const [mesSelecionado, setMesSelecionado] = useState("Todos");
 
   if (loading) {
@@ -54,39 +53,32 @@ export default function DashboardPage() {
   const meta = dadosFiltrados.map((item) => item.meta);
 
   return (
-    <div className="container" style={{ paddingTop: "1rem" }}>
-      
-      {/* Título */}
-      <h1>Dashboard de Produção</h1>
-      <p style={{ color: "var(--secondary)" }}>Atualizado agora</p>
+    <div className="container fade-in">
 
-      {/* 🔥 FILTRO */}
-      <select
-        value={mesSelecionado}
-        onChange={(e) => setMesSelecionado(e.target.value)}
-        style={{
-          padding: "0.5rem",
-          borderRadius: "8px",
-          marginTop: "1rem",
-        }}
-      >
-        <option value="Todos">Todos</option>
-        {data.map((item) => (
-          <option key={item.mes} value={item.mes}>
-            {item.mes}
-          </option>
-        ))}
-      </select>
+      {/* HEADER DA PÁGINA */}
+      <div className="page-header">
+        <div>
+          <h1>Dashboard de Produção</h1>
+          <p className="subtitle">Atualizado agora</p>
+        </div>
+
+        {/* FILTRO BONITO */}
+        <select
+          className="select"
+          value={mesSelecionado}
+          onChange={(e) => setMesSelecionado(e.target.value)}
+        >
+          <option value="Todos">Todos</option>
+          {data.map((item) => (
+            <option key={item.mes} value={item.mes}>
+              {item.mes}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* KPIs */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "1rem",
-          margin: "2rem 0",
-        }}
-      >
+      <div className="kpi-grid">
         <CardKPI
           title="Produção Total"
           value={formatNumber(totalProducao, 0)}
@@ -106,12 +98,14 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Gráfico */}
-      <ProductionChart
-        labels={labels}
-        producao={producao}
-        meta={meta}
-      />
+      {/* GRÁFICO */}
+      <div className="section">
+        <ProductionChart
+          labels={labels}
+          producao={producao}
+          meta={meta}
+        />
+      </div>
 
     </div>
   );

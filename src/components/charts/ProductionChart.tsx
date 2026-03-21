@@ -1,63 +1,33 @@
 "use client";
 
-import React from "react";
-import { Line } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
+  LineChart,
+  Line,
+  XAxis,
   Tooltip,
-  Legend
-} from "chart.js";
+  ResponsiveContainer,
+} from "recharts";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
-
-interface Props {
-  labels: string[];
-  producao: number[];
-  meta: number[];
-}
-
-export default function ProductionChart({ labels, producao, meta }: Props) {
-  const data = {
-    labels,
-    datasets: [
-      {
-  label: "Produção",
-  data: producao,
-  borderColor: "#3b82f6",
-  backgroundColor: "rgba(59, 130, 246, 0.15)",
-  fill: true,
-  tension: 0.4,
-},
-{
-  label: "Meta",
-  data: meta,
-  borderColor: "#f97316",
-  borderDash: [6, 6],
-  tension: 0.4,
-},
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: function (context: any) {
-            return `${context.dataset.label}: ${context.raw}`;
-          },
-        },
-      },
-    },
-  };
+export default function ProductionChart({ labels, producao, meta }: any) {
+  const data = labels.map((mes: string, i: number) => ({
+    mes,
+    producao: producao[i],
+    meta: meta[i],
+  }));
 
   return (
-    <div className="card">
-      <Line data={data} options={options} />
+    <div className="card chart-container fade-in">
+      <h3 style={{ marginBottom: "1rem" }}>Produção vs Meta</h3>
+
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <XAxis dataKey="mes" />
+          <Tooltip />
+
+          <Line type="monotone" dataKey="producao" stroke="#2563eb" strokeWidth={3} />
+          <Line type="monotone" dataKey="meta" stroke="#f97316" strokeWidth={2} />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }
