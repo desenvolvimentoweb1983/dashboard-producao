@@ -9,6 +9,7 @@ import Skeleton from "@/components/ui/Skeleton";
 
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { DashboardItem } from "@/types/dashboardItem"; // tipo criado
 
 export default function DashboardPage() {
   const { data, loading, error } = useDashboard();
@@ -27,12 +28,12 @@ export default function DashboardPage() {
   if (error) return <p>Erro ao carregar dados</p>;
 
   // 🔥 FILTRO
-  const dadosFiltrados =
+  const dadosFiltrados: DashboardItem[] =
     mesSelecionado === "Todos"
       ? data
       : data.filter((item) => item.mes === mesSelecionado);
 
-  // KPIs
+  // ===== KPIs =====
   const totalProducao = dadosFiltrados.reduce(
     (acc, item) => acc + item.produzido,
     0
@@ -47,58 +48,68 @@ export default function DashboardPage() {
 
   const eficiencia = totalMeta > 0 ? totalProducao / totalMeta : 0;
 
-  // Gráfico
+  // ===== GRÁFICO =====
   const labels = dadosFiltrados.map((item) => item.mes);
   const producao = dadosFiltrados.map((item) => item.produzido);
   const meta = dadosFiltrados.map((item) => item.meta);
 
-  // ===== FUNÇÃO EXPORTAR PLANILHA =====
+  // ===== EXPORTAR EXCEL =====
   const exportExcel = async () => {
     if (!dadosFiltrados || dadosFiltrados.length === 0) return;
 
     const workbook = new ExcelJS.Workbook();
 
-    // ===== Aba Dados Brutos =====
+    // ===== Dados Brutos =====
     const wsDados = workbook.addWorksheet("Dados Brutos");
-
-    // Cabeçalho
     const headers = Object.keys(dadosFiltrados[0]);
     wsDados.columns = headers.map((h) => ({ header: h, key: h, width: 18 }));
-
     dadosFiltrados.forEach((row) => wsDados.addRow(row));
 
-    // Formata cabeçalho
     wsDados.getRow(1).eachCell((cell) => {
       cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-      cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "1F4E79" } };
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "1F4E79" },
+      };
       cell.alignment = { horizontal: "center" };
     });
 
-    // ===== Aba KPIs =====
+    // ===== KPIs =====
     const wsKPI = workbook.addWorksheet("KPIs");
     wsKPI.columns = [
       { header: "Mês", key: "mes", width: 15 },
       { header: "Produção Total", key: "producao", width: 18 },
       { header: "Eficiência (%)", key: "eficiencia", width: 15 },
       { header: "Defeitos", key: "defeitos", width: 12 },
+      { header: "OEE (%)", key: "oee", width: 12 },
     ];
 
     dadosFiltrados.forEach((row) => {
+      const produtividade = row.produzido / row.meta;
+      const eficienciaRow = (row.tempoProducao - row.paradas) / row.tempoProducao;
+      const oee = produtividade * eficienciaRow;
+
       wsKPI.addRow({
         mes: row.mes,
         producao: row.produzido,
-        eficiencia: formatPercent(row.produzido / row.meta),
+        eficiencia: formatPercent(eficienciaRow),
         defeitos: row.defeitos,
+        oee: formatPercent(oee),
       });
     });
 
     wsKPI.getRow(1).eachCell((cell) => {
       cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-      cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "1F4E79" } };
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "1F4E79" },
+      };
       cell.alignment = { horizontal: "center" };
     });
 
-    // ===== Salvar arquivo =====
+    // ===== Salvar =====
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/octet-stream" });
     saveAs(blob, "Dashboard_Industrial.xlsx");
@@ -106,14 +117,13 @@ export default function DashboardPage() {
 
   return (
     <div className="container fade-in">
-      {/* HEADER DA PÁGINA */}
+      {/* HEADER */}
       <div className="page-header flex flex-col md:flex-row md:justify-between md:items-center gap-2">
         <div>
           <h1>Dashboard de Produção</h1>
           <p className="subtitle">Atualizado agora</p>
         </div>
 
-        {/* FILTRO + BOTÃO EXPORTAR */}
         <div className="flex gap-2">
           <select
             className="select"
@@ -141,13 +151,11 @@ export default function DashboardPage() {
           value={formatNumber(totalProducao, 0)}
           type="producao"
         />
-
         <CardKPI
           title="Eficiência"
           value={formatPercent(eficiencia)}
           type="eficiencia"
         />
-
         <CardKPI
           title="Defeitos"
           value={formatNumber(totalDefeitos, 0)}
