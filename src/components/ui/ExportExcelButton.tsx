@@ -4,7 +4,7 @@ import React from "react";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { useDashboard } from "@/hooks/useDashboard";
-import { formatNumber, formatPercent, formatDate } from "@/lib/format";
+import { formatPercent, formatDate } from "@/lib/format";
 
 export default function ExportExcelButton() {
   const { data, loading, error } = useDashboard();
@@ -16,15 +16,9 @@ export default function ExportExcelButton() {
 
     // ===== 1️⃣ Aba Dados Brutos =====
     const wsDados = workbook.addWorksheet("Dados Brutos");
-
-    // Cabeçalho automático
     const headers = Object.keys(data[0]);
     wsDados.columns = headers.map((h) => ({ header: h, key: h, width: 18 }));
-
-    // Adiciona os dados
     data.forEach((row) => wsDados.addRow(row));
-
-    // Formata cabeçalho
     wsDados.getRow(1).eachCell((cell) => {
       cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
       cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "1F4E79" } };
@@ -34,32 +28,31 @@ export default function ExportExcelButton() {
     // ===== 2️⃣ Aba KPIs =====
     const wsKPI = workbook.addWorksheet("KPIs");
     wsKPI.columns = [
-      { header: "Data", key: "Data", width: 15 },
-      { header: "Produtividade (%)", key: "Produtividade", width: 18 },
-      { header: "Eficiência (%)", key: "Eficiencia", width: 15 },
-      { header: "OEE (%)", key: "OEE", width: 12 },
-      { header: "Perdas (%)", key: "Perdas", width: 12 },
-      { header: "Cumprimento Meta (%)", key: "Cumprimento", width: 20 },
+      { header: "Mês", key: "mes", width: 15 },
+      { header: "Produtividade (%)", key: "produtividade", width: 18 },
+      { header: "Eficiência (%)", key: "eficiencia", width: 15 },
+      { header: "OEE (%)", key: "oee", width: 12 },
+      { header: "Perdas (%)", key: "perdas", width: 12 },
+      { header: "Cumprimento Meta (%)", key: "cumprimento", width: 20 },
     ];
 
     data.forEach((row) => {
-      const produtividade = ((row.produzido / row.meta) * 100).toFixed(2);
-      const eficiencia = (((row["tempoProducao"] - row.paradas) / row["tempoProducao"]) * 100).toFixed(2);
-      const oee = ((produtividade * eficiencia / 100).toFixed(2));
-      const perdas = ((row.perdas / row.meta) * 100).toFixed(2);
-      const cumprimento = ((row.produzido / row.meta) * 100).toFixed(2);
+      const produtividade = (row.produzido / row.meta) * 100;
+      const eficiencia = ((row.tempoProducao - row.paradas) / row.tempoProducao) * 100;
+      const oee = (produtividade * eficiencia) / 100;
+      const perdas = row.perdas ? (row.perdas / row.meta) * 100 : 0;
+      const cumprimento = (row.produzido / row.meta) * 100;
 
       wsKPI.addRow({
-        Data: row.data,
-        Produtividade: produtividade,
-        Eficiencia: eficiencia,
-        OEE: oee,
-        Perdas: perdas,
-        Cumprimento: cumprimento,
+        mes: row.mes,
+        produtividade: produtividade.toFixed(2),
+        eficiencia: eficiencia.toFixed(2),
+        oee: oee.toFixed(2),
+        perdas: perdas.toFixed(2),
+        cumprimento: cumprimento.toFixed(2),
       });
     });
 
-    // Formata cabeçalho KPIs
     wsKPI.getRow(1).eachCell((cell) => {
       cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
       cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "1F4E79" } };

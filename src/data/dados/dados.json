@@ -1,5 +1,8 @@
 [
   { "mes": "Jan", "produzido": 120, "meta": 150, "defeitos": 5 },
   { "mes": "Fev", "produzido": 160, "meta": 150, "defeitos": 3 },
-  { "mes": "Mar", "produzido": 140, "meta": 150, "defeitos": 6 }
+  { "mes": "Mar", "produzido": 140, "meta": 150, "defeitos": 6 },
+  { "mes": "Abr", "produzido": 180, "meta": 170, "defeitos": 2 },
+  { "mes": "Mai", "produzido": 130, "meta": 160, "defeitos": 4 },
+  { "mes": "Jun", "produzido": 150, "meta": 150, "defeitos": 3 }
 ]
