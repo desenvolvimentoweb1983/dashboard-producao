@@ -3,13 +3,12 @@
 import React, { useState } from "react";
 import CardKPI from "@/components/ui/CardKPI";
 import ProductionChart from "@/components/charts/ProductionChart";
-import { useDashboard } from "@/hooks/useDashboard";
+import { useDashboard, DashboardItem } from "@/hooks/useDashboard";
 import { formatNumber, formatPercent } from "@/lib/format";
 import Skeleton from "@/components/ui/Skeleton";
 
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import { DashboardItem } from "@/types/dashboardItem"; // tipo criado
 
 export default function DashboardPage() {
   const { data, loading, error } = useDashboard();

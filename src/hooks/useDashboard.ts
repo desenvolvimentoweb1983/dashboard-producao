@@ -10,6 +10,7 @@ export interface DashboardItem {
   defeitos: number;
   tempoProducao: number; // necessário para cálculo de eficiência
   paradas: number;       // necessário para cálculo de eficiência
+  perdas?: number;       // opcional
 }
 
 export function useDashboard() {
@@ -26,11 +27,12 @@ export function useDashboard() {
 
         const json = await response.json();
 
-        // 🔹 Mapeia os dados do JSON adicionando valores default para tempoProducao e paradas
+        // 🔹 Adiciona valores default para tempoProducao e paradas
         const mappedData: DashboardItem[] = json.map((item: any) => ({
           ...item,
-          tempoProducao: 8, // valor default (pode ajustar se quiser)
-          paradas: 0.3      // valor default (pode ajustar se quiser)
+          tempoProducao: item.tempoProducao ?? 8,
+          paradas: item.paradas ?? 0.3,
+          perdas: item.perdas ?? 0,
         }));
 
         setData(mappedData);
