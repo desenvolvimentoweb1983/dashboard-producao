@@ -1,8 +1,8 @@
 [
-  { "mes": "Jan", "produzido": 120, "meta": 150, "defeitos": 5 },
-  { "mes": "Fev", "produzido": 160, "meta": 150, "defeitos": 3 },
-  { "mes": "Mar", "produzido": 140, "meta": 150, "defeitos": 6 },
-  { "mes": "Abr", "produzido": 180, "meta": 170, "defeitos": 2 },
-  { "mes": "Mai", "produzido": 130, "meta": 160, "defeitos": 4 },
-  { "mes": "Jun", "produzido": 150, "meta": 150, "defeitos": 3 }
+  { "mes": "Jan", "produzido": 120, "meta": 150, "defeitos": 5, "tempoProducao": 8, "paradas": 0.5 },
+  { "mes": "Fev", "produzido": 160, "meta": 150, "defeitos": 3, "tempoProducao": 8, "paradas": 0.3 },
+  { "mes": "Mar", "produzido": 140, "meta": 150, "defeitos": 6, "tempoProducao": 7.5, "paradas": 0.5 },
+  { "mes": "Abr", "produzido": 180, "meta": 170, "defeitos": 2, "tempoProducao": 8, "paradas": 0.2 },
+  { "mes": "Mai", "produzido": 130, "meta": 160, "defeitos": 4, "tempoProducao": 8, "paradas": 0.4 },
+  { "mes": "Jun", "produzido": 150, "meta": 150, "defeitos": 3, "tempoProducao": 8, "paradas": 0.3 }
 ]
