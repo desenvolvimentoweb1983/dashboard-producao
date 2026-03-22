@@ -52,21 +52,20 @@ export default function DashboardPage() {
   const producao = dadosFiltrados.map((item) => item.produzido);
   const meta = dadosFiltrados.map((item) => item.meta);
 
-  // ===== EXPORTAR PLANILHA =====
+  // ===== FUNÇÃO EXPORTAR PLANILHA =====
   const exportExcel = async () => {
-    if (!data || data.length === 0) return;
+    if (!dadosFiltrados || dadosFiltrados.length === 0) return;
 
     const workbook = new ExcelJS.Workbook();
 
     // ===== Aba Dados Brutos =====
     const wsDados = workbook.addWorksheet("Dados Brutos");
 
-    // Cabeçalho automático
-    const headers = Object.keys(data[0]);
+    // Cabeçalho
+    const headers = Object.keys(dadosFiltrados[0]);
     wsDados.columns = headers.map((h) => ({ header: h, key: h, width: 18 }));
 
-    // Adiciona os dados
-    data.forEach((row) => wsDados.addRow(row));
+    dadosFiltrados.forEach((row) => wsDados.addRow(row));
 
     // Formata cabeçalho
     wsDados.getRow(1).eachCell((cell) => {
@@ -88,12 +87,11 @@ export default function DashboardPage() {
       wsKPI.addRow({
         mes: row.mes,
         producao: row.produzido,
-        eficiencia: ((row.produzido / row.meta) * 100).toFixed(2),
+        eficiencia: formatPercent(row.produzido / row.meta),
         defeitos: row.defeitos,
       });
     });
 
-    // Formata cabeçalho KPIs
     wsKPI.getRow(1).eachCell((cell) => {
       cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
       cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "1F4E79" } };
@@ -109,7 +107,7 @@ export default function DashboardPage() {
   return (
     <div className="container fade-in">
       {/* HEADER DA PÁGINA */}
-      <div className="page-header">
+      <div className="page-header flex flex-col md:flex-row md:justify-between md:items-center gap-2">
         <div>
           <h1>Dashboard de Produção</h1>
           <p className="subtitle">Atualizado agora</p>

@@ -4,7 +4,7 @@ import React from "react";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { useDashboard } from "@/hooks/useDashboard";
-import { format } from "@/lib/format";
+import { formatNumber, formatPercent, formatDate } from "@/lib/format";
 
 export default function ExportExcelButton() {
   const { data, loading, error } = useDashboard();
